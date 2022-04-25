@@ -1,8 +1,11 @@
 {
   "name": "api-hackernews-node",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Api to get related articles about Node.js in Hacker News",
+  "author": {
+    "name": "Edixon Piña",
+    "email": "edixonalbertto@gmail.com"
+  },
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
