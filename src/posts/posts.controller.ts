@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Delete, Query, Param, Body } from '@nestjs/common'
 
-import { PostsService } from './posts.service'
+import { PostsService } from './services/posts.service'
 
 // TODO: create DTO
 @Controller('posts')
@@ -8,7 +8,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get('/page/:nroPage')
-  getPostsPaginated(@Param('nroPage') nroPage: number, @Query() filter: TFilter) {
+  getPostsByPage(@Param('nroPage') nroPage: number, @Query() filter: TFilter) {
     return this.postsService.getAll(filter, nroPage)
   }
 
@@ -18,8 +18,8 @@ export class PostsController {
   }
 
   @Post()
-  createPost(@Body() post: any) {
-    return this.postsService.create(post)
+  createPost(@Body() hit: THit) {
+    return this.postsService.create(hit)
   }
 
   @Delete(':id')
