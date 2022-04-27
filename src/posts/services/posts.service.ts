@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { FindConditions, Repository } from 'typeorm'
+import { ConfigService } from '@nestjs/config'
 
 import { PostEntity } from '../post.entity'
 import { HitsService } from './hits.service'
@@ -14,7 +15,8 @@ export class PostsService {
 
   constructor(
     @InjectRepository(PostEntity) private readonly postRepository: Repository<PostEntity>,
-    private readonly hitsService: HitsService
+    private readonly hitsService: HitsService,
+    private readonly config: ConfigService
   ) {}
 
   async getAll(filter: FilterQueryDto, nroPage?: number): Promise<PostEntity[]> {
@@ -81,7 +83,7 @@ export class PostsService {
   }
 
   private autoRefresh(): void {
-    if (!this.interval && process.env.NODE_ENV !== 'test') {
+    if (!this.interval && this.config.get<TEnv>('NODE_ENV') !== 'test') {
       try {
         this.interval = setInterval(() => this.refresh(), 1000 * 60 * this.TIME_AUTO_REFRESH_MIN)
       } catch (error) {

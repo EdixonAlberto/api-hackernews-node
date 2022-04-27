@@ -1,21 +1,16 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 
 import { PostsModule } from './posts/posts.module'
+import { DatabaseModule } from './database/database.module'
 
 @Module({
-  imports: [
-    PostsModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'admin',
-      password: '1234',
-      database: 'postgres',
-      autoLoadEntities: true,
-      synchronize: true
-    })
-  ]
+  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, PostsModule]
 })
-export class AppModule {}
+export class AppModule {
+  static port: number
+
+  constructor(private readonly configService: ConfigService) {
+    AppModule.port = +this.configService.get<string>('PORT')
+  }
+}

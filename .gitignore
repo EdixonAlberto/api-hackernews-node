@@ -1,4 +1,4 @@
-# compiled output
+# Compiled output
 /dist
 /node_modules
 
@@ -29,3 +29,7 @@ lerna-debug.log*
 
 # IDE - VSCode
 /.vscode
+
+# Environments
+.env*
+!.env.template

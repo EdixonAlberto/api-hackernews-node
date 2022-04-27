@@ -56,3 +56,5 @@ type TRefreshResponse = {
   response: string
   message: string
 }
+
+type TEnv = 'production' | 'development' | 'test'
