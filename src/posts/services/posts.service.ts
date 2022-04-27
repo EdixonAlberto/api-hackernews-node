@@ -63,11 +63,8 @@ export class PostsService {
 
     const posts: PostEntity[] = await this.getAll({})
 
-    // Delete database to add new posts
-    if (posts.length) {
-      const deletePostsPromise = posts.map(post => this.destroy(post.post_id))
-      await Promise.allSettled(deletePostsPromise) // remove multiple posts simultaneously
-    }
+    // Delete all fields to add new posts
+    if (posts.length) await this.postRepository.query('DELETE FROM "posts"')
 
     // Populate database
     const createPostsPromises = hits.map(hit => this.create(hit))

@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 import { MONTH_NAMES } from './constants'
 
-@Entity()
+@Entity({ name: 'posts' })
 export class PostEntity {
   @PrimaryGeneratedColumn('uuid')
   post_id?: string
