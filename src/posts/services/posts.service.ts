@@ -52,7 +52,7 @@ export class PostsService {
     return await this.postRepository.remove(post)
   }
 
-  async refresh(): Promise<any> {
+  async refresh(): Promise<TRefreshResponse> {
     const hits: THit[] | null = await this.hitsService.getAll()
 
     // Handle errors first
@@ -81,7 +81,7 @@ export class PostsService {
   }
 
   private autoRefresh(): void {
-    if (!this.interval) {
+    if (!this.interval && process.env.NODE_ENV !== 'test') {
       try {
         this.interval = setInterval(() => this.refresh(), 1000 * 60 * this.TIME_AUTO_REFRESH_MIN)
       } catch (error) {

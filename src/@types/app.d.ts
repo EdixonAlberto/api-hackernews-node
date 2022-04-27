@@ -51,3 +51,8 @@ type THNResponse = {
   params: string
   processingTimeMS: number
 }
+
+type TRefreshResponse = {
+  response: string
+  message: string
+}
