@@ -1,10 +1,3 @@
-type TFilter = {
-  author?: string
-  tag?: string
-  title?: string
-  month?: string
-}
-
 type THit = {
   created_at: string
   title: null | string

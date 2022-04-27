@@ -4,6 +4,7 @@ import { FindConditions, Repository } from 'typeorm'
 
 import { PostEntity } from '../post.entity'
 import { HitsService } from './hits.service'
+import { FilterQueryDto } from '../dto'
 
 @Injectable()
 export class PostsService {
@@ -14,7 +15,7 @@ export class PostsService {
     private readonly hitsService: HitsService
   ) {}
 
-  async getAll(filter: TFilter, nroPage?: number): Promise<PostEntity[]> {
+  async getAll(filter: FilterQueryDto, nroPage?: number): Promise<PostEntity[]> {
     let where: FindConditions<PostEntity> = {}
     let skip: number
     let take: number
