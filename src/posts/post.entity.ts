@@ -1,11 +1,13 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
+import { MONTH_NAMES } from './constants'
+
 @Entity()
 export class PostEntity {
   @PrimaryGeneratedColumn('uuid')
   post_id?: string
 
-  @Column()
+  @Column({ enum: MONTH_NAMES })
   month: string
 
   @Column()

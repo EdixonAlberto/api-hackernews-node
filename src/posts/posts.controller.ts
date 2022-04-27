@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Query, Param, Body } from '@nestjs/common'
+import { Controller, Get, Post, Delete, Query, Param } from '@nestjs/common'
 
 import { PostsService } from './services/posts.service'
 import { FilterQueryDto, ParamPageDto, ParamPostDto } from './dto'
@@ -17,10 +17,9 @@ export class PostsController {
     return this.postsService.getAll(filter)
   }
 
-  // TODO: Remove this later
-  @Post()
-  createPost(@Body() hit: THit) {
-    return this.postsService.create(hit)
+  @Post('/refresh')
+  refresh() {
+    return this.postsService.refresh()
   }
 
   @Delete(':id')
