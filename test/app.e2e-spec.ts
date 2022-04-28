@@ -4,6 +4,7 @@ import * as request from 'supertest'
 
 import { AppModule } from './../src/app.module'
 import { PostEntity } from './../src/posts/post.entity'
+import { UserEntity } from '../src/users/user.entity'
 
 jest.setTimeout(30000)
 
@@ -21,12 +22,44 @@ describe('AppModule (e2e)', () => {
 
     app = await moduleFixture.createNestApplication().init()
     server = await app.listen(4000)
-    agent = request.agent(server) // since the application is already listening, it should use the allocated port
+    // Since the application is already listening, it should use the allocated port
+    agent = request.agent(server)
   })
 
   afterEach(async () => {
     await app.close()
     if (server) await server.close()
+  })
+
+  describe('CRUD Module Users', () => {
+    let user: UserEntity
+
+    it('POST: /users', async () => {
+      const newUser: UserEntity = {
+        email: 'example@email.com',
+        password: '1234'
+      }
+
+      const userResponse = await agent.post('/users').type('json').send(newUser).expect(201)
+      const { email } = userResponse.body as UserEntity
+      user = userResponse.body
+
+      expect(email).toEqual(newUser.email)
+    })
+
+    it('GET: /users', async () => {
+      const usersResponse = await agent.get('/users').expect(200)
+      const users = usersResponse.body as UserEntity[]
+
+      expect(users.length).toBeTruthy()
+    })
+
+    it('DELETE: /uses/:id', async () => {
+      const userResponse = await agent.delete(`/users/${user.user_id}`).expect(200)
+      const { email } = userResponse.body as UserEntity
+
+      expect(email).toEqual(user.email)
+    })
   })
 
   describe('CRUD Module Posts', () => {

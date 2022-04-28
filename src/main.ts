@@ -14,7 +14,9 @@ async function bootstrap() {
     .build()
   const document = SwaggerModule.createDocument(app, options)
 
-  SwaggerModule.setup('api/docs', app, document)
+  SwaggerModule.setup('api/docs', app, document, {
+    customSiteTitle: 'Docs - Api HackerNews Node'
+  })
 
   app.useGlobalPipes(
     new ValidationPipe({
