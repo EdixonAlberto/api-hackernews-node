@@ -32,6 +32,9 @@ docker-compose up -d
 docker-compose up
 ```
 
+> NOTA: If you want to use the local database via docker-compose you should set this environment variable like this:
+> `DB_HOST=db`
+
 - In Local
 
 ```bash
