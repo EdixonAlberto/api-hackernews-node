@@ -1,5 +1,14 @@
 image: node:16-alpine
 
+services:
+  - postgres:13-alpine
+
+variables:
+  POSTGRES_DB: postgres
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: 1234
+  POSTGRES_HOST_AUTH_METHOD: trust
+
 cache:
   paths:
     - node_modules/
@@ -11,16 +20,20 @@ stages:
 
 linter-job:
   stage: linter
-  scripts:
+  script:
+    - npm install
     - npm run lint
 
 build-job:
   stage: build
-  scripts:
+  script:
     - npm install
+    - npm run build
 
 test-job:
   stage: test
-  scripts:
-    - npm run test
+  script:
+    - cp template.env .env
+    - npm install
     - npm run test:e2e
+    - npm run test

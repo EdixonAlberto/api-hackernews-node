@@ -51,8 +51,8 @@ npm run start:dev
 $ npm run start:prod
 ```
 
-To fill the database for the first time you must use the following endpoint: `POST: /api/refresh`, it will fill the
-`posts` table for the first time and keep it updated **once a time**.
+To fill the database for the first time you must use the following endpoint: `POST: /api/posts/refresh`, it will fill
+the `posts` table for the first time and keep it updated **once a time**.
 
 Then a user must be created to authenticate and generate an **access token** and thus be able to interact with the other
 routes.
