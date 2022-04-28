@@ -3,9 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 
 import { DatabaseModule } from './database/database.module'
 import { PostsModule } from './posts/posts.module'
+import { UsersModule } from './users/users.module'
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, PostsModule]
+  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, PostsModule, UsersModule]
 })
 export class AppModule {
   static port: number
