@@ -3,7 +3,7 @@ version: '3.9'
 services:
   db:
     image: postgres:13-alpine
-    container_name: db-hackernews-node
+    container_name: db-node
     restart: always
     env_file: .env
     environment:
@@ -13,34 +13,27 @@ services:
     ports:
       - $DB_PORT:$DB_PORT
     volumes:
-      - db-node:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
 
   api:
     build:
       context: .
-      target: production
+      target: $NODE_ENV
       dockerfile: ./Dockerfile
-    command: npm start
+    command: npm run start:dev
     image: node:16-alpine
-    container_name: api-hackernews-node
+    container_name: api-node
     restart: unless-stopped
     env_file: .env
     environment:
-      - DB_HOST=localhost
-      - DB_PORT=5432
-      - DB_NAME=db-hackernews-node
-      - DB_USER=admin
-      - DB_PASSWORD=1234
-      - DB_LOGGIN=false
+      - DB_HOST=db
     ports:
-      - 4000:$PORT
+      - $PORT:$PORT
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    # networks:
-    #   - net-api
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
 
 volumes:
-  db-node:
+  database:

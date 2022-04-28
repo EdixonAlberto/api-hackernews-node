@@ -1,10 +1,9 @@
+# stage 1
 FROM node:16-alpine AS development
 
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
 COPY package*.json ./
-
-RUN npm i glob rimraf
 
 RUN npm i --only=development
 
@@ -12,19 +11,17 @@ COPY . .
 
 RUN npm run build
 
+# stage 2
 FROM node:16-alpine AS production
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
 COPY package*.json ./
 
 RUN npm i --only=production
 
 COPY . .
+COPY --from=development /usr/app/dist ./dist
+COPY .env .
 
-COPY --from=development /usr/src/app/dist ./dist
-
-CMD ["node", "dist/main"]
+CMD ["npm", "run", "start:prod"]
