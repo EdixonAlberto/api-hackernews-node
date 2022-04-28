@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common'
+import { Controller, Get, Post, Delete, Body, Param, UseGuards } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
+import { AuthGuard } from '@nestjs/passport'
 
 import { UsersService } from './services/users.service'
-import { CreateUserDto, LoginUserDto, DeleteUserDto } from './dto'
+import { CreateUserDto, DeleteUserDto } from './dto'
 
 @ApiTags('Users')
 @Controller('users')
@@ -10,6 +11,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @UseGuards(AuthGuard('jwt'))
   getUsers() {
     return this.usersService.getAll()
   }
@@ -19,12 +21,8 @@ export class UsersController {
     return this.usersService.create(user)
   }
 
-  @Post('/login')
-  loginUser(@Body() login: LoginUserDto) {
-    return
-  }
-
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   deleteUser(@Param() { id }: DeleteUserDto) {
     return this.usersService.destroy(id)
   }

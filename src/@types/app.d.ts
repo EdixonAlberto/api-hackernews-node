@@ -58,3 +58,12 @@ type TRefreshResponse = {
 }
 
 type TEnv = 'production' | 'development' | 'test'
+
+type TJwtPayload = {
+  username: null | string
+  email: string
+}
+
+type TLoginResponse = {
+  accessToken: string
+}

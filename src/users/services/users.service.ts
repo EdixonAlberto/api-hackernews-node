@@ -3,14 +3,22 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { UserEntity } from '../user.entity'
-import { CreateUserDto } from '../dto'
+import { CreateUserDto, UserDto } from '../dto'
 
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>) {}
 
-  async getAll(): Promise<UserEntity[]> {
-    return await this.userRepository.find()
+  async getAll(): Promise<UserDto[]> {
+    const users = await this.userRepository.find()
+
+    return users.map(user => new UserDto(user))
+  }
+
+  async getByEmail(email: string): Promise<UserEntity> {
+    return await this.userRepository.findOne({
+      where: { email }
+    })
   }
 
   async create(user: CreateUserDto): Promise<UserEntity> {

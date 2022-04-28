@@ -5,6 +5,8 @@ import * as request from 'supertest'
 import { AppModule } from './../src/app.module'
 import { PostEntity } from './../src/posts/post.entity'
 import { UserEntity } from '../src/users/user.entity'
+import { LoginUserDto } from '../src/users/dto'
+const randomEmail = require('random-email')
 
 jest.setTimeout(30000)
 
@@ -32,30 +34,46 @@ describe('AppModule (e2e)', () => {
   })
 
   describe('CRUD Module Users', () => {
-    let user: UserEntity
+    let user: Partial<UserEntity & TLoginResponse>
 
     it('POST: /users', async () => {
       const newUser: Partial<UserEntity> = {
-        email: 'example@email.com',
-        password: '1234'
+        email: randomEmail(),
+        password: '1234abcd'
       }
 
       const userResponse = await agent.post('/users').type('json').send(newUser).expect(201)
-      const { email } = userResponse.body as UserEntity
-      user = userResponse.body
+      const { user_id, email } = userResponse.body as UserEntity
+      user = { ...newUser, user_id }
 
       expect(email).toEqual(newUser.email)
     })
 
+    it('POST: /auth', async () => {
+      const login = <LoginUserDto>{
+        email: user.email,
+        password: user.password
+      }
+
+      const loginResponse = await agent.post('/auth').type('json').send(login).expect(200)
+      const { accessToken } = loginResponse.body as TLoginResponse
+      user.accessToken = accessToken
+
+      expect(accessToken).toBeTruthy()
+    })
+
     it('GET: /users', async () => {
-      const usersResponse = await agent.get('/users').expect(200)
+      const usersResponse = await agent.get('/users').auth(user.accessToken, { type: 'bearer' }).expect(200)
       const users = usersResponse.body as UserEntity[]
 
       expect(users.length).toBeTruthy()
     })
 
     it('DELETE: /uses/:id', async () => {
-      const userResponse = await agent.delete(`/users/${user.user_id}`).expect(200)
+      const userResponse = await agent
+        .delete(`/users/${user.user_id}`)
+        .auth(user.accessToken, { type: 'bearer' })
+        .expect(200)
       const { email } = userResponse.body as UserEntity
 
       expect(email).toEqual(user.email)

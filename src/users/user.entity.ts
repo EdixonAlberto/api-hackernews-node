@@ -15,7 +15,6 @@ export class UserEntity {
   @Column()
   password?: string
 
-  @AfterLoad()
   @AfterInsert()
   @AfterRemove()
   hiddenPassword(): void {
