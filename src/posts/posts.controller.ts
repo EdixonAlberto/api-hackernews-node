@@ -8,7 +8,7 @@ import { FilterQueryDto, ParamPageDto, ParamPostDto } from './dto'
 @ApiTags('Posts')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
-@Controller('posts')
+@Controller('/api/posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
