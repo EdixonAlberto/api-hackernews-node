@@ -35,7 +35,7 @@ describe('AppModule (e2e)', () => {
     let user: UserEntity
 
     it('POST: /users', async () => {
-      const newUser: UserEntity = {
+      const newUser: Partial<UserEntity> = {
         email: 'example@email.com',
         password: '1234'
       }
