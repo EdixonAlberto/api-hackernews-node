@@ -8,6 +8,7 @@ import { UserEntity } from '../src/users/user.entity'
 import { LoginUserDto } from '../src/users/dto'
 import { LoginDto } from '../src/auth/dto'
 import { MONTH_NAMES } from '../src/posts/constants'
+// eslint-disable-next-line
 const randomEmail = require('random-email')
 
 jest.setTimeout(30000)

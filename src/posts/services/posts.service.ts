@@ -20,7 +20,7 @@ export class PostsService {
   ) {}
 
   async getAll(filter: FilterQueryDto, nroPage?: number): Promise<PostEntity[]> {
-    let where: FindConditions<PostEntity> = {}
+    const where: FindConditions<PostEntity> = {}
     let skip: number
     let take: number
 

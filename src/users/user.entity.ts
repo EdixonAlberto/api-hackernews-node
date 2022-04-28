@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, AfterRemove, AfterLoad } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, AfterRemove } from 'typeorm'
 import * as bcrypt from 'bcrypt'
 
 @Entity({ name: 'users' })
