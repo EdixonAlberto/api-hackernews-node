@@ -1,8 +1,13 @@
-import { Controller, Get, Post, Delete, Query, Param } from '@nestjs/common'
+import { Controller, Get, Post, Delete, Query, Param, UseGuards } from '@nestjs/common'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { AuthGuard } from '@nestjs/passport'
 
 import { PostsService } from './services/posts.service'
 import { FilterQueryDto, ParamPageDto, ParamPostDto } from './dto'
 
+@ApiTags('Posts')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}

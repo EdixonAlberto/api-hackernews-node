@@ -1,3 +1,3 @@
-export { FilterQueryDto } from './filter-query.dto'
-export { ParamPostDto } from './param-post.dto'
-export { ParamPageDto } from './param-page.dto'
+export * from './filter-query.dto'
+export * from './param-post.dto'
+export * from './param-page.dto'

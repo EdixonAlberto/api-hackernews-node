@@ -6,6 +6,8 @@ import { AppModule } from './../src/app.module'
 import { PostEntity } from './../src/posts/post.entity'
 import { UserEntity } from '../src/users/user.entity'
 import { LoginUserDto } from '../src/users/dto'
+import { LoginDto } from '../src/auth/dto'
+import { MONTH_NAMES } from '../src/posts/constants'
 const randomEmail = require('random-email')
 
 jest.setTimeout(30000)
@@ -16,6 +18,8 @@ describe('AppModule (e2e)', () => {
   let app: INestApplication
   let server = null
   let agent: request.SuperAgentTest
+  let token: string
+  let user: Partial<UserEntity>
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -33,9 +37,7 @@ describe('AppModule (e2e)', () => {
     if (server) await server.close()
   })
 
-  describe('CRUD Module Users', () => {
-    let user: Partial<UserEntity & TLoginResponse>
-
+  describe('CRUD Module Users and Auth', () => {
     it('POST: /users', async () => {
       const newUser: Partial<UserEntity> = {
         email: randomEmail(),
@@ -56,50 +58,47 @@ describe('AppModule (e2e)', () => {
       }
 
       const loginResponse = await agent.post('/auth').type('json').send(login).expect(200)
-      const { accessToken } = loginResponse.body as TLoginResponse
-      user.accessToken = accessToken
+      const { accessToken } = loginResponse.body as LoginDto
+      token = accessToken
 
       expect(accessToken).toBeTruthy()
     })
 
     it('GET: /users', async () => {
-      const usersResponse = await agent.get('/users').auth(user.accessToken, { type: 'bearer' }).expect(200)
+      const usersResponse = await agent.get('/users').auth(token, { type: 'bearer' }).expect(200)
       const users = usersResponse.body as UserEntity[]
 
       expect(users.length).toBeTruthy()
     })
-
-    it('DELETE: /uses/:id', async () => {
-      const userResponse = await agent
-        .delete(`/users/${user.user_id}`)
-        .auth(user.accessToken, { type: 'bearer' })
-        .expect(200)
-      const { email } = userResponse.body as UserEntity
-
-      expect(email).toEqual(user.email)
-    })
   })
 
-  describe('CRUD Module Posts', () => {
+  describe('CRUD Module Posts and DELETE user', () => {
     let post: PostEntity
 
     it('POST: /posts/refresh', async () => {
-      const refreshResponse = await agent.post('/posts/refresh').expect(201)
+      const refreshResponse = await agent.post('/posts/refresh').auth(token, { type: 'bearer' }).expect(201)
       const { response } = refreshResponse.body as TRefreshResponse
 
       expect(response).toBe<string>('Refreshed Database')
     })
 
-    it('GET: /posts/pate/:nroPage?{...filter}', async () => {
-      const filter = '?month=April&tag=story'
-      const postsResponse = await agent.get(`/posts/page/1${filter}`).expect(200)
-      const qtyPosts = postsResponse.body.length
+    it('GET: /posts/pate/:nroPage?filters', async () => {
+      const currentMonth = MONTH_NAMES[new Date().getMonth()]
+      const tags = ['story', 'comment']
+
+      const postsPromises = tags.map(async tag => {
+        const filters = `month=${currentMonth}&tag=${tag}`
+        return agent.get(`/posts/page/1?${filters}`).auth(token, { type: 'bearer' }).expect(200)
+      })
+
+      const [postsResponse1, postsResponse2] = await Promise.all(postsPromises)
+      const qtyPosts = postsResponse1.body.length || postsResponse2.body.length
 
       expect(qtyPosts).toBeTruthy()
     })
 
     it('GET: /posts', async () => {
-      const postsResponse = await agent.get('/posts').expect(200)
+      const postsResponse = await agent.get('/posts').auth(token, { type: 'bearer' }).expect(200)
       const qtyPosts = postsResponse.body.length
       post = postsResponse.body[0]
 
@@ -107,7 +106,14 @@ describe('AppModule (e2e)', () => {
     })
 
     it('DELETE: /posts/:id', async () => {
-      await agent.delete(`/posts/${post.post_id}`).expect(200)
+      await agent.delete(`/posts/${post.post_id}`).auth(token, { type: 'bearer' }).expect(200)
+    })
+
+    it('DELETE: /uses/:id', async () => {
+      const userResponse = await agent.delete(`/users/${user.user_id}`).auth(token, { type: 'bearer' }).expect(200)
+      const { email } = userResponse.body as UserEntity
+
+      expect(email).toEqual(user.email)
     })
   })
 })

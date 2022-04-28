@@ -63,7 +63,3 @@ type TJwtPayload = {
   username: null | string
   email: string
 }
-
-type TLoginResponse = {
-  accessToken: string
-}

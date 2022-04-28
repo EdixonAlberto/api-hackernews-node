@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Delete, Body, Param, UseGuards } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger'
 import { AuthGuard } from '@nestjs/passport'
 
 import { UsersService } from './services/users.service'
@@ -11,6 +11,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   getUsers() {
     return this.usersService.getAll()
@@ -22,6 +23,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   deleteUser(@Param() { id }: DeleteUserDto) {
     return this.usersService.destroy(id)

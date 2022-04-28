@@ -22,7 +22,7 @@ export class FilterQueryDto {
   @IsNotEmpty()
   readonly title?: string
 
-  @ApiProperty({ required: false, enum: MONTH_NAMES })
+  @ApiProperty({ required: false, enum: MONTH_NAMES, enumName: 'Month' })
   @IsOptional()
   @IsIn(MONTH_NAMES)
   readonly month?: string
