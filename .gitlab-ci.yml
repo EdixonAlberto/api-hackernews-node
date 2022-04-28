@@ -1,0 +1,26 @@
+image: node:16-alpine
+
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - linter
+  - build
+  - test
+
+linter-job:
+  stage: linter
+  scripts:
+    - npm run lint
+
+build-job:
+  stage: build
+  scripts:
+    - npm install
+
+test-job:
+  stage: test
+  scripts:
+    - npm run test
+    - npm run test:e2e
