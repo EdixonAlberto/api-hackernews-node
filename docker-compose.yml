@@ -28,8 +28,8 @@ services:
     ports:
       - $PORT:$PORT
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - .:/usr/app
+      - /usr/app/node_modules
     depends_on:
       - db
 
