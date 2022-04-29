@@ -85,3 +85,4 @@ $ npm run test:cov
 - docker-compose v1.29.2
 - node v16.14.2
 - npm v8.7.0
+- nestjs/cli v8.2.5
