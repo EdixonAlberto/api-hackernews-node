@@ -1,8 +1,6 @@
 # API Hacker News Node
 
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+![template](https://repository-images.githubusercontent.com/489782685/58ad8c53-7725-4e78-82fc-eb38f95e2c76)
 
 ## Description
 
