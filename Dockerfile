@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm i --only=development
+RUN npm i
 
 COPY . .
 
@@ -18,10 +18,9 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm i --only=production
+RUN npm i --omit=dev
 
 COPY . .
 COPY --from=development /usr/src/app/dist ./dist
-COPY .env .
 
 CMD ["node", "dist/main"]
