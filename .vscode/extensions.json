@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "rangav.vscode-thunder-client",
+    "irongeek.vscode-env",
+    "esbenp.prettier-vscode",
+    "dzannotti.vscode-babel-coloring",
+    "jabacchetta.javascript-snippets"
+  ]
+}

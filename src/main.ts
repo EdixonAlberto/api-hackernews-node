@@ -1,6 +1,8 @@
-import { ValidationPipe } from '@nestjs/common'
+import { Logger, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { resolve } from 'path'
+import { writeFileSync } from 'fs'
 
 import { AppModule } from './app.module'
 
@@ -18,6 +20,10 @@ async function bootstrap() {
     customSiteTitle: 'Docs - Api HackerNews Node'
   })
 
+  // Export documentation of "openapi-definition" in file json
+  const outputPath = resolve(process.cwd(), resolve('docs', 'swagger.json'));
+  writeFileSync(outputPath, JSON.stringify(document), { encoding: 'utf8' });
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -30,5 +36,6 @@ async function bootstrap() {
   )
 
   await app.listen(AppModule.port)
+  Logger.log(`Application is running on: ${await app.getUrl()}`)
 }
 bootstrap()

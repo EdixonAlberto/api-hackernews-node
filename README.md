@@ -6,7 +6,7 @@
 
 Api to get related articles about Node.js in Hacker News.
 
-Api Public &#x279c; **[https://api-hackernews-node-production.up.railway.app/api/docs](https://api-hackernews-node-production.up.railway.app/api/docs)**
+Documentation &#x279c; **[OpenAPI Specification](https://edixonalberto.github.io/api-hackernews-node/index.html)**
 
 ---
 
